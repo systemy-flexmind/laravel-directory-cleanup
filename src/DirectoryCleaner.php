@@ -51,7 +51,8 @@ class DirectoryCleaner
 
         $files = collect($this->filesystem->files($workingDir, true))
             ->filter(function ($file) {
-                return Carbon::createFromTimestamp(filemtime($file))
+                $lastModifyDate = $this->storage->lastModified($file);
+                return Carbon::createFromTimestamp($lastModifyDate))
                     ->lt($this->timeInPast);
             })
             ->filter(function ($file) {
